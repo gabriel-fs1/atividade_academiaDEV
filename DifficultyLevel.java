@@ -1,3 +1,3 @@
 public enum DifficultyLevel {
-    BEGGINER, INTERMEDIATE, ADVANCED
+    BEGINNER, INTERMEDIATE, ADVANCED
 }

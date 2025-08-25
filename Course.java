@@ -7,6 +7,15 @@ public class Course {
     private DifficultyLevel difficultyLevel;
     private CourseStatus status;
 
+    public Course(String title, String description, String instructorName, int durationInHours, DifficultyLevel difficultyLevel) {
+        this.title = title;
+        this.description = description;
+        this.instructorName = instructorName;
+        this.durationInHours = durationInHours;
+        this.difficultyLevel = difficultyLevel;
+        this.status = CourseStatus.ACTIVE;
+    }
+
     public String getTitle() {
         return title;
     }

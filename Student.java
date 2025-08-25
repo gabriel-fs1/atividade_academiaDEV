@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.ArrayList;
 
 public class Student extends User{
 
@@ -8,6 +9,7 @@ public class Student extends User{
     public Student(String username, String password, SubscriptionPlan subscriptionPlan) {
         super(username, password);
         this.subscriptionPlan = subscriptionPlan;
+        this.enrollments = new ArrayList<>();
     }
 
     public SubscriptionPlan getSubscriptionPlan() {
@@ -24,12 +26,12 @@ public class Student extends User{
 
     // ver isso
     public void addEnrollment(Enrollment enrollment) {
-        enrollments.add(enrollment);
+       this.enrollments.add(enrollment);
     }
 
     // tem que ver isso aqui tbm
     public void removeEnrollment(Course course) {
-        
+        this.enrollments.removeIf(enrollment -> enrollment.getCourse().equals(course));
     }
     
 }

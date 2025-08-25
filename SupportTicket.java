@@ -7,6 +7,13 @@ public class SupportTicket {
     private String message;
     private LocalDateTime submissionDate;
 
+    public SupportTicket(User user, String title, String message, LocalDateTime submissionDate) {
+        this.user = user;
+        this.title = title;
+        this.message = message;
+        this.submissionDate = submissionDate;
+    }
+
     public User getUser() {
         return user;
     }

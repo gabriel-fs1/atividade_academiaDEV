@@ -7,6 +7,12 @@ public class Enrollment {
     private LocalDate enrollmentDate;
     private int progress;
 
+    public Enrollment(Student student, Course course, LocalDate enrollmentDate) {
+        this.student = student;
+        this.course = course;
+        this.enrollmentDate = enrollmentDate;
+        this.progress = 0;
+    }
     public Student getStudent() {
         return student;
     }
@@ -20,8 +26,8 @@ public class Enrollment {
     }
 
     // tem que ver isso aqui
-    public void uptadeProgress(int progress) {
-        this.progress = progress;
+    public void updateProgress(int progress) {
+        
     }
     
 }
