@@ -1,0 +1,122 @@
+@startuml diagrama
+' Skinparam para melhorar a legibilidade
+skinparam classAttributeIconSize 0
+
+' --- Classes Abstratas e Interfaces ---
+abstract class User {
+  # name: String
+  # email: String
+  + getName(): String
+  + getEmail(): String
+}
+
+interface SubscriptionPlan {
+  + {abstract} canEnroll(currentEnrollments: long): boolean
+  + {abstract} getPlanName(): String
+}
+
+' --- Enums ---
+enum DifficultyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum CourseStatus {
+  ACTIVE
+  INACTIVE
+}
+
+' --- Classes Concretas ---
+class Admin extends User {
+  + Admin(name: String, email: String)
+}
+
+class Student extends User {
+  - subscriptionPlan: SubscriptionPlan
+  - enrollments: List<Enrollment>
+  + Student(name: String, email: String, plan: SubscriptionPlan)
+  + getSubscriptionPlan(): SubscriptionPlan
+  + setSubscriptionPlan(plan: SubscriptionPlan): void
+  + getEnrollments(): List<Enrollment>
+  + addEnrollment(enrollment: Enrollment): void
+  + removeEnrollment(course: Course): void
+}
+
+class BasicPlan implements SubscriptionPlan {
+  - MAX_ENROLLMENTS: int = 3
+  + canEnroll(currentEnrollments: long): boolean
+  + getPlanName(): String
+}
+
+class PremiumPlan implements SubscriptionPlan {
+  + canEnroll(currentEnrollments: long): boolean
+  + getPlanName(): String
+}
+
+class Course {
+  - title: String
+  - description: String
+  - instructorName: String
+  - durationInHours: int
+  - difficultyLevel: DifficultyLevel
+  - status: CourseStatus
+  + getTitle(): String
+  + getInstructorName(): String
+  + getDifficultyLevel(): DifficultyLevel
+  + getStatus(): CourseStatus
+  + setStatus(status: CourseStatus): void
+}
+
+class Enrollment {
+  - student: Student
+  - course: Course
+  - enrollmentDate: LocalDate
+  - progress: int
+  + getStudent(): Student
+  + getCourse(): Course
+  + getProgress(): int
+  + updateProgress(progress: int): void
+}
+
+class SupportTicket {
+  - user: User
+  - title: String
+  - message: String
+  - submissionDate: LocalDateTime
+  + getUser(): User
+  + getTitle(): String
+  + getMessage(): String
+}
+
+' --- Classes Utilitárias/Serviços (representação simplificada) ---
+class PlatformData {
+  - users: Map<String, User>
+  - courses: Map<String, Course>
+  - supportTickets: Queue<SupportTicket>
+  + addUser(user: User): void
+  + findUserByEmail(email: String): Optional<User>
+  + ...
+}
+
+class GenericCsvExporter {
+  + {static} export(data: List<?>, columns: List<String>): String
+}
+
+' --- Exceção Customizada ---
+class EnrollmentException extends Exception {
+  + EnrollmentException(message: String)
+}
+
+
+' --- Relacionamentos ---
+Student "1" o--> "1" SubscriptionPlan : has a
+Student "1" o--> "0..*" Enrollment : has
+Course "1" o--> "0..*" Enrollment : is part of
+
+Enrollment ..> Student
+Enrollment ..> Course
+SupportTicket ..> User
+
+hide empty members
+@enduml
