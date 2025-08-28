@@ -1,3 +1,4 @@
+package model;
 public class Course {
 
     private String title;
@@ -22,6 +23,14 @@ public class Course {
 
     public String getIntructorName(){
         return instructorName;
+    }
+
+    public int getDurationInHours(){
+        return durationInHours;
+    }
+
+    public String getDescription(){
+        return description;
     }
 
     public DifficultyLevel getDifficultyLevel(){

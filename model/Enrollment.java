@@ -1,16 +1,14 @@
-import java.time.LocalDate;
+package model;
 
 public class Enrollment {
 
     private Student student;
     private Course course;
-    private LocalDate enrollmentDate;
     private int progress;
 
-    public Enrollment(Student student, Course course, LocalDate enrollmentDate) {
+    public Enrollment(Student student, Course course) {
         this.student = student;
         this.course = course;
-        this.enrollmentDate = enrollmentDate;
         this.progress = 0;
     }
     public Student getStudent() {
@@ -27,7 +25,9 @@ public class Enrollment {
 
     // tem que ver isso aqui
     public void updateProgress(int progress) {
-        
+        if(progress >= 0 && progress <= 100) {
+            this.progress = progress;
+        }
     }
     
 }

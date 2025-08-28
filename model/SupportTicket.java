@@ -1,17 +1,18 @@
-import java.time.LocalDateTime;
+package model;
+
 
 public class SupportTicket {
 
     private User user;
     private String title;
     private String message;
-    private LocalDateTime submissionDate;
 
-    public SupportTicket(User user, String title, String message, LocalDateTime submissionDate) {
+
+    public SupportTicket(User user, String title, String message) {
         this.user = user;
         this.title = title;
         this.message = message;
-        this.submissionDate = submissionDate;
+
     }
 
     public User getUser() {

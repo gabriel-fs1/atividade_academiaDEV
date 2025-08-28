@@ -1,3 +1,4 @@
+package model;
 public interface SubscriptionPlan {
 
     public abstract boolean canEnroll(long currentEnrollments);

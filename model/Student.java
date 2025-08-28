@@ -1,3 +1,4 @@
+package model;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -6,8 +7,8 @@ public class Student extends User{
     private SubscriptionPlan subscriptionPlan;
     private List<Enrollment> enrollments;
 
-    public Student(String username, String password, SubscriptionPlan subscriptionPlan) {
-        super(username, password);
+    public Student(String name, String email, SubscriptionPlan subscriptionPlan) {
+        super(name, email);
         this.subscriptionPlan = subscriptionPlan;
         this.enrollments = new ArrayList<>();
     }

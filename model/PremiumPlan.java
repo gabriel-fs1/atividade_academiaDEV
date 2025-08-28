@@ -1,3 +1,4 @@
+package model;
 public class PremiumPlan implements SubscriptionPlan {
     public String getPlanName() {
         return "Premium Plan";
