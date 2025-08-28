@@ -14,6 +14,7 @@ import model.SupportTicket;
 import repository.CourseRepository;
 import repository.SupportTicketRepository;
 import repository.UserRepository;
+import repository.EnrollmentRepository;
 /////////////////////////////////////
 /// VER ESSA CLASSE AQUI ////////////
 /////////////////////////////////////
@@ -27,7 +28,7 @@ public class InitialData {
      * Método estático para popular o sistema com dados iniciais.
      * @param data A instância de PlatformData que será populada.
      */
-    public static void load(UserRepository users, CourseRepository courses, SupportTicketRepository supportTickets) {
+    public static void load(UserRepository users, CourseRepository courses, SupportTicketRepository supportTickets, EnrollmentRepository enrollments) {
         // --- Planos de Assinatura ---
         SubscriptionPlan basicPlan = new BasicPlan();
         SubscriptionPlan premiumPlan = new PremiumPlan();
@@ -73,8 +74,8 @@ public class InitialData {
         Enrollment enrollmentAna2 = new Enrollment(student1, pythonBasico);
         enrollmentAna2.updateProgress(25); // Progresso de 25%
 
-        student1.addEnrollment(enrollmentAna1);
-        student1.addEnrollment(enrollmentAna2);
+        enrollments.save(enrollmentAna1);
+        enrollments.save(enrollmentAna2);
 
         // Aluno Bruno (Plano Premium) com 3 matrículas, para testar quem tem mais matrículas
         Enrollment enrollmentBruno1 = new Enrollment(student2, javaAvancado);
@@ -86,14 +87,14 @@ public class InitialData {
         Enrollment enrollmentBruno3 = new Enrollment(student2, docker);
         enrollmentBruno3.updateProgress(10);
 
-        student2.addEnrollment(enrollmentBruno1);
-        student2.addEnrollment(enrollmentBruno2);
-        student2.addEnrollment(enrollmentBruno3);
+        enrollments.save(enrollmentBruno1);
+        enrollments.save(enrollmentBruno2);
+        enrollments.save(enrollmentBruno3);
         
         // Aluna Carla (Plano Basic) com 1 matrícula
         Enrollment enrollmentCarla1 = new Enrollment(student3, dbDesign);
         enrollmentCarla1.updateProgress(45);
-        student3.addEnrollment(enrollmentCarla1);
+        enrollments.save(enrollmentCarla1);
         
         // --- Tickets de Suporte (para popular a fila) ---
         SupportTicket ticket1 = new SupportTicket(student1, "Dúvida sobre Loop em Java", "Não estou conseguindo fazer o exercício da aula 5.");
