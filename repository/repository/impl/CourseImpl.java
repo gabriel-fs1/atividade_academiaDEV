@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import repository.CourseRepository;
 import model.Course;
+import model.CourseStatus;
+import model.DifficultyLevel;
 
 public class CourseImpl implements CourseRepository {
 
@@ -25,6 +27,16 @@ public class CourseImpl implements CourseRepository {
     @Override
     public Collection<Course> findAll() {
         return courses.values();
+    }
+
+    @Override
+    public Collection<Course> findByDifficultyLevel(DifficultyLevel level) {
+        return courses.values().stream().filter(c -> c.getDifficultyLevel().equals(level)).toList();
+    }
+
+    @Override
+    public Collection<Course> findActiveCourses() {
+        return courses.values().stream().filter(c -> c.getStatus() == CourseStatus.ACTIVE).toList();
     }
     
 }

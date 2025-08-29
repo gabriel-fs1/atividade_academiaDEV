@@ -48,8 +48,8 @@ public class InitialData {
 
         // --- Cursos ---
         Course javaBasico = new Course("Java: Primeiros Passos", "Aprenda os fundamentos do Java.", "Dr. Java", 20, DifficultyLevel.BEGINNER);
-        Course javaAvancado = new Course("Java: Padrões de Projeto", "Explore os padrões de projeto com Java.", "Dr. Java", 40, DifficultyLevel.ADVANCED);
-        Course pythonBasico = new Course("Python para Ciência de Dados", "Introdução ao Python com Pandas e NumPy.", "Prof. Cobra", 30, DifficultyLevel.BEGINNER);
+        Course javaAvancado = new Course("Java: Padroes de Projeto", "Explore os padrões de projeto com Java.", "Dr. Java", 40, DifficultyLevel.ADVANCED);
+        Course pythonBasico = new Course("Python para Ciencia de Dados", "Introdução ao Python com Pandas e NumPy.", "Prof. Cobra", 30, DifficultyLevel.BEGINNER);
         Course springBoot = new Course("API Rest com Spring Boot", "Construa APIs robustas com Spring.", "Prof. Mola", 35, DifficultyLevel.INTERMEDIATE);
         Course docker = new Course("Docker para Desenvolvedores", "Domine containers e facilite seus deploys.", "Prof. Container", 15, DifficultyLevel.INTERMEDIATE);
         Course dbDesign = new Course("Modelagem de Banco de Dados", "Aprenda a modelar bancos de dados relacionais.", "Sra. SQL", 25, DifficultyLevel.ADVANCED);
@@ -69,23 +69,23 @@ public class InitialData {
         // --- Matrículas (Enrollments) ---
         // Aluna Ana (Plano Basic) com 2 matrículas
         Enrollment enrollmentAna1 = new Enrollment(student1, javaBasico);
-        enrollmentAna1.updateProgress(80); // Progresso de 80%
+        enrollmentAna1.setProgress(80); // Progresso de 80%
         
         Enrollment enrollmentAna2 = new Enrollment(student1, pythonBasico);
-        enrollmentAna2.updateProgress(25); // Progresso de 25%
+        enrollmentAna2.setProgress(25); // Progresso de 25%
 
         enrollments.save(enrollmentAna1);
         enrollments.save(enrollmentAna2);
 
         // Aluno Bruno (Plano Premium) com 3 matrículas, para testar quem tem mais matrículas
         Enrollment enrollmentBruno1 = new Enrollment(student2, javaAvancado);
-        enrollmentBruno1.updateProgress(100); // Curso concluído
+        enrollmentBruno1.setProgress(100); // Curso concluído
         
         Enrollment enrollmentBruno2 = new Enrollment(student2, springBoot);
-        enrollmentBruno2.updateProgress(50);
+        enrollmentBruno2.setProgress(50);
         
         Enrollment enrollmentBruno3 = new Enrollment(student2, docker);
-        enrollmentBruno3.updateProgress(10);
+        enrollmentBruno3.setProgress(10);
 
         enrollments.save(enrollmentBruno1);
         enrollments.save(enrollmentBruno2);
@@ -93,7 +93,7 @@ public class InitialData {
         
         // Aluna Carla (Plano Basic) com 1 matrícula
         Enrollment enrollmentCarla1 = new Enrollment(student3, dbDesign);
-        enrollmentCarla1.updateProgress(45);
+        enrollmentCarla1.setProgress(45);
         enrollments.save(enrollmentCarla1);
         
         // --- Tickets de Suporte (para popular a fila) ---

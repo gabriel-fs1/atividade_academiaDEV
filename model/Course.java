@@ -21,7 +21,7 @@ public class Course {
         return title;
     }
 
-    public String getIntructorName(){
+    public String getInstructorName(){
         return instructorName;
     }
 
@@ -41,7 +41,6 @@ public class Course {
         return status;
     }
 
-    //tem que ver isso aqui mais tarde
     public void setStatus(CourseStatus status){
         this.status = status;
     }

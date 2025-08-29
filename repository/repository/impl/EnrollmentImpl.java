@@ -3,11 +3,11 @@ package repository.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import model.Course;
 import model.Enrollment;
 import model.Student;
 import repository.EnrollmentRepository;
+import java.util.Collection;
 
 public class EnrollmentImpl implements EnrollmentRepository {
 
@@ -15,32 +15,49 @@ public class EnrollmentImpl implements EnrollmentRepository {
 
     @Override
     public void save(Enrollment enrollment) {
+        if (enrollment == null) {
+            throw new IllegalArgumentException("Matrícula não pode ser nula.");
+        }
         enrollments.add(enrollment);
     }
 
     @Override
-    public void deleteByStudentAndCourse(Student student, Course course) {
-        
-        findByStudentAndCourse(student, course)
-            .ifPresent(enrollments::remove); 
+    public void delete(Enrollment enrollment) {
+        enrollments.remove(enrollment);
     }
 
     @Override
-    public Optional<Enrollment> findByStudentAndCourse(Student student, Course course) {
+public Optional<Enrollment> findByStudentAndCourse(Student student, String courseTitle) {
+    System.out.println("Buscando matrícula: aluno=" + student.getName() + ", curso=" + courseTitle);
+    
+
+    return enrollments.stream()
+            .filter(e -> e.getStudent().getEmail().equals(student.getEmail()))
+            .filter(e -> e.getCourse().getTitle().equals(courseTitle))
+            .findFirst();
+}
+
+    @Override
+    public List<Enrollment> findByStudent(Student student) {
         return enrollments.stream()
-                .filter(e -> e.getStudent().equals(student) && e.getCourse().equals(course))
-                .findFirst();
+                .filter(e -> e.getStudent().getEmail().equals(student.getEmail()))
+                .toList();
     }
 
     @Override
-    public List<Enrollment> findAllByStudent(Student student) {
+    public List<Enrollment> findByCourse(Course course) {
         return enrollments.stream()
-                .filter(e -> e.getStudent().equals(student))
-                .collect(Collectors.toList());
+                .filter(e -> e.getCourse().getTitle().equals(course.getTitle()))
+                .toList();
     }
 
     @Override
-    public List<Enrollment> findAll() {
-        return new ArrayList<>(enrollments);
+    public Collection<Enrollment> findAll() {
+        return new ArrayList<>(enrollments); // cópia segura
+    }
+
+    @Override
+    public boolean existsByStudentAndCourse(Student student, String courseTitle) {
+        return findByStudentAndCourse(student, courseTitle).isPresent();
     }
 }

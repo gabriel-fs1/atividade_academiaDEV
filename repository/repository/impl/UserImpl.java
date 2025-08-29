@@ -19,7 +19,6 @@ public class UserImpl implements UserRepository{
 
     @Override
     public Optional<User> findByEmail(String email) {
-        System.out.println("Buscando no HashMap pelo email: " + email);
         return Optional.ofNullable(users.get(email));
     }
     

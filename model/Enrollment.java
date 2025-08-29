@@ -11,6 +11,9 @@ public class Enrollment {
         this.course = course;
         this.progress = 0;
     }
+
+    public Enrollment(){}
+
     public Student getStudent() {
         return student;
     }
@@ -23,11 +26,24 @@ public class Enrollment {
         return progress;
     }
 
-    // tem que ver isso aqui
-    public void updateProgress(int progress) {
-        if(progress >= 0 && progress <= 100) {
-            this.progress = progress;
-        }
+    public void setProgress(int progress) {
+    if (progress < 0 || progress > 100) {
+        throw new IllegalArgumentException("O progresso deve estar entre 0 e 100%.");
     }
+    if (this.progress > progress) {
+        throw new IllegalArgumentException("O progresso não pode ser menor que o atual (" + this.progress + "%).");
+    }
+    this.progress = progress;
+}
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    
     
 }
