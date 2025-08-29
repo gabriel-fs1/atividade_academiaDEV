@@ -24,7 +24,7 @@ public class MenuView {
     }
 
     public void mostrarMensagemLoginSucesso(String nome) {
-        System.out.println("✅ Login realizado como: " + nome + "\n");
+        System.out.println("Login realizado como: " + nome + "\n");
     }
 
     public void mostrarErro(String mensagem) {
