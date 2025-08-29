@@ -1,10 +1,14 @@
 package model;
 
+import annotation.CsvColumn;
 
 public class SupportTicket {
 
+    @CsvColumn(header = "Usuário")
     private User user;
+    @CsvColumn(header = "Titulo")
     private String title;
+    @CsvColumn(header = "Descrição")
     private String description;
 
 

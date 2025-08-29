@@ -1,10 +1,15 @@
 package model;
 import java.util.List;
+
+import annotation.CsvColumn;
+
 import java.util.ArrayList;
 
 public class Student extends User{
 
+    @CsvColumn(header = "Plano")
     private SubscriptionPlan subscriptionPlan;
+    @CsvColumn(header = "Matriculas")
     private List<Enrollment> enrollments;
 
     public Student(String name, String email, SubscriptionPlan subscriptionPlan) {

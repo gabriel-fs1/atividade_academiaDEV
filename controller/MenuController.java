@@ -6,8 +6,10 @@ import dtos.CourseCatalogDTO;
 import dtos.EnrollmentDTO;
 import dtos.UserSummaryDTO;
 import model.BasicPlan;
+
 import model.CourseStatus;
 import model.DifficultyLevel;
+
 import model.PremiumPlan;
 import model.Student;
 import model.SubscriptionPlan;
@@ -16,6 +18,7 @@ import service.CourseService;
 import service.EnrollmentService;
 import service.SupportTicketService;
 import service.UserService;
+import util.GenericCsvExporter;
 import service.ReportService;
 import view.MenuView;
 
@@ -26,6 +29,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 
+
 public class MenuController {
 
     private final UserService userService;
@@ -34,6 +38,7 @@ public class MenuController {
     private final SupportTicketService supportTicketService;
     private final MenuView view;
     private final ReportService reportService;
+    private final GenericCsvExporter csvExporter = new GenericCsvExporter();
 
     private User currentUser;
     private Scanner scanner = new Scanner(System.in);
@@ -117,7 +122,8 @@ public class MenuController {
                     showReportsMenu();
                     break;
                 case 5:
-
+                    exportarDados();
+                    break;
                 case 6:
                     alterarPlano();
                     break;
@@ -130,6 +136,38 @@ public class MenuController {
             }
         }
     }
+
+    private void exportarDados() {
+    System.out.println("Escolha o tipo de dado para exportar:");
+    System.out.println("1. Cursos");
+    System.out.println("2. Alunos");
+    System.out.println("3. Matrículas");
+    System.out.println("4. Tickets");
+    System.out.println("5. Sair");
+    System.out.print("Escolha: ");
+    String opcao = scanner.nextLine().trim();
+
+    switch (opcao) {
+        case "1":
+            //exportarCursos();
+            break;
+        case "2":
+            //exportarAlunos();
+            break;
+        case "3":
+            //exportarMatriculas();
+            break;
+        case "4":
+            //exportarTickets();
+            break;
+        case "5":
+            return;
+        default:
+            System.out.println("Opção inválida.");
+    }
+}
+
+    
 
     private void alterarPlano() {
         String email = view.lerEmailAluno();

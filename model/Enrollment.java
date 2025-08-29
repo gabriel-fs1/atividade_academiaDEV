@@ -1,9 +1,14 @@
 package model;
 
+import annotation.CsvColumn;
+
 public class Enrollment {
 
+    @CsvColumn(header = "Aluno")
     private Student student;
+    @CsvColumn(header = "Curso")
     private Course course;
+    @CsvColumn(header = "Progresso")
     private int progress;
 
     public Enrollment(Student student, Course course) {

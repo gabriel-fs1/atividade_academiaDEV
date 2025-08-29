@@ -51,8 +51,8 @@ public class CourseService {
     Course course = cr.findByTitle(title)
             .orElseThrow(() -> new IllegalArgumentException("Curso não encontrado: " + title));
 
-    course.setStatus(newStatus); // altera o status
-    cr.save(course); // salva de volta (em memória, só pra seguir o padrão)
+    course.setStatus(newStatus); 
+    cr.save(course);
 
     return toDTO(course);
 }
