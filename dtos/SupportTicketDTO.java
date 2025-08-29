@@ -6,10 +6,10 @@ public class SupportTicketDTO {
     private String description;
     private String emailAuthor;
 
-    public SupportTicketDTO(String title, String description, String emailAuthor) {
+    public SupportTicketDTO(String emailAuthor, String title, String description) {
+        this.emailAuthor = emailAuthor;
         this.title = title;
         this.description = description;
-        this.emailAuthor = emailAuthor;
     }
 
     public SupportTicketDTO() {

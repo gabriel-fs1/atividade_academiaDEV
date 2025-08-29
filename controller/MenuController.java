@@ -4,19 +4,27 @@ package controller;
 
 import dtos.CourseCatalogDTO;
 import dtos.EnrollmentDTO;
+import dtos.UserSummaryDTO;
+import model.BasicPlan;
 import model.CourseStatus;
 import model.DifficultyLevel;
+import model.PremiumPlan;
+import model.Student;
+import model.SubscriptionPlan;
 import model.User;
 import service.CourseService;
 import service.EnrollmentService;
 import service.SupportTicketService;
 import service.UserService;
+import service.ReportService;
 import view.MenuView;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
+
 
 public class MenuController {
 
@@ -25,20 +33,23 @@ public class MenuController {
     private final EnrollmentService enrollmentService;
     private final SupportTicketService supportTicketService;
     private final MenuView view;
+    private final ReportService reportService;
 
     private User currentUser;
     private Scanner scanner = new Scanner(System.in);
+    
 
     public MenuController(UserService userService,
-                          CourseService courseService,
-                          EnrollmentService enrollmentService,
-                          SupportTicketService supportTicketService,
-                          MenuView view) {
+            CourseService courseService,
+            EnrollmentService enrollmentService,
+            SupportTicketService supportTicketService,
+            MenuView view, ReportService reportService) {
         this.userService = userService;
         this.courseService = courseService;
         this.enrollmentService = enrollmentService;
         this.supportTicketService = supportTicketService;
         this.view = view;
+        this.reportService = reportService;
     }
 
     public void start() {
@@ -100,21 +111,120 @@ public class MenuController {
                     ativarOuInativarCurso();
                     break;
                 case 3:
-                    
+                    atenderTicket();
                     break;
                 case 4:
-                    
+                    showReportsMenu();
+                    break;
                 case 5:
-                    
+
                 case 6:
-                    return; // sair da conta
+                    alterarPlano();
+                    break;
                 case 7:
+                    return;
+                case 8:
                     System.exit(0);
                 default:
                     view.mostrarErro("Opção inválida");
             }
         }
     }
+
+    private void alterarPlano() {
+        String email = view.lerEmailAluno();
+        if (email.isEmpty()) {
+            view.mostrarErro("Email nao pode ser vazio");
+            return;
+        }
+
+        Optional<UserSummaryDTO> dtoOpt = userService.findByEmail(email);
+        if (dtoOpt.isEmpty()) {
+            view.mostrarErro("Usuário nao encontrado");
+            return;
+        }
+        UserSummaryDTO alunoDto = dtoOpt.get();
+
+        if (!"STUDENT".equals(alunoDto.getRole())) {
+            view.mostrarErro("Apenas alunos podem ter plano alterado.");
+            return;
+        }
+
+        Student student = (Student) userService.findFullUserByEmail(email).orElse(null);
+        if (student == null) {
+            view.mostrarErro("Erro ao carregar dados do aluno.");
+            return;
+        }
+
+        SubscriptionPlan novoPlano = student.getSubscriptionPlan() instanceof BasicPlan
+                ? new PremiumPlan()
+                : new BasicPlan();
+
+        String planoAtual = student.getSubscriptionPlan().getPlanName();
+        String novoPlanoNome = novoPlano.getPlanName();
+
+        if (view.confirmarAlteracaoPlano(alunoDto.getName(), planoAtual, novoPlanoNome)) {
+            try {
+                userService.changeSubscriptionPlan(email, novoPlano, currentUser);
+                view.mostrarPlanoAtualizado(email, novoPlanoNome);
+            } catch (IllegalArgumentException e) {
+                view.mostrarErro(e.getMessage());
+            }
+        } else {
+            view.mostrarErro("Operação cancelada");
+        }
+    }
+
+    
+
+    private void atenderTicket() {
+        view.mostrarTicketAtendido(supportTicketService.attendNextTicket(currentUser));
+    }
+
+    private void showReportsMenu() {
+    while (true) {
+        System.out.println("\n--- Relatórios ---");
+        System.out.println("1. Cursos por dificuldade");
+        System.out.println("2. Instrutores ativos");
+        System.out.println("3. Alunos por plano");
+        System.out.println("4. Média de progresso");
+        System.out.println("5. Aluno com mais matrículas");
+        System.out.println("6. Voltar");
+        System.out.print("Escolha: ");
+
+        String opcao = scanner.nextLine().trim();
+
+        switch (opcao) {
+            case "1":
+                DifficultyLevel level = view.selecionarDificuldade();
+                List<CourseCatalogDTO> cursos = reportService.getCoursesByDifficulty(level);
+                view.mostrarCursos(cursos);
+                break;
+            case "2":
+                Set<String> instrutores = reportService.getActiveInstructors();
+                view.mostrarInstrutores(instrutores);
+                break;
+            case "3":
+                Map<String, List<UserSummaryDTO>> alunosPorPlano = reportService.getStudentsByPlan();
+                view.mostrarAlunoAgrupado(alunosPorPlano);
+                break;
+            case "4":
+                double media = reportService.getAverageProgress();
+                view.mostrarMediaProgresso(media);
+                break;
+            case "5":
+                Optional<UserSummaryDTO> alunoMaisMatriculas = reportService.getStudentWithMostEnrollments();
+                view.mostrarAlunoComMaiorMatricula(alunoMaisMatriculas);
+                break;
+            case "6":
+                return;
+            default:
+                System.out.println("Opção inválida.");
+        }
+    }
+}
+
+    
 
     private void ativarOuInativarCurso() {
         String title = view.lerTituloCurso();
@@ -152,27 +262,27 @@ public class MenuController {
                 case 1:
                     view.mostrarCursos(courseService.findActiveCourses());
                     break;
+                // case 2:
+                // verCursosPorDificuldade();
+                // break;
                 case 2:
-                    verCursosPorDificuldade();
-                    break;
-                case 3:
                     matricularEmCurso();
                     break;
-                case 4:
+                case 3:
                     verMinhasMatriculas();
                     break;
-                case 5:
+                case 4:
                     atualizarProgresso();
                     break;
-                case 6:
+                case 5:
                     cancelarMatricula();
                     break;
-                case 7:
+                case 6:
                     abrirTicket();
                     break;
-                case 8:
+                case 7:
                     return;
-                case 9:
+                case 8:
                     System.exit(0);
                 default:
                     view.mostrarErro("Opção inválida");
@@ -180,31 +290,31 @@ public class MenuController {
         }
     }
 
-    private void verCursosPorDificuldade() {
-        System.out.println("\n--- Dificuldade ---");
-        System.out.println("1. Iniciante");
-        System.out.println("2. Intermediário");
-        System.out.println("3. Avançado");
-        System.out.print("Escolha: ");
-        int opcao = scanner.nextInt();
+    // private void verCursosPorDificuldade() {
+    // System.out.println("\n--- Dificuldade ---");
+    // System.out.println("1. Iniciante");
+    // System.out.println("2. Intermediário");
+    // System.out.println("3. Avançado");
+    // System.out.print("Escolha: ");
+    // int opcao = scanner.nextInt();
 
-        Collection<CourseCatalogDTO> cursos;
-        switch (opcao) {
-            case 1:
-                cursos = courseService.findByDifficultyLevel(DifficultyLevel.BEGINNER);
-                break;
-            case 2:
-                cursos = courseService.findByDifficultyLevel(DifficultyLevel.INTERMEDIATE);
-                break;
-            case 3:
-                cursos = courseService.findByDifficultyLevel(DifficultyLevel.ADVANCED);
-                break;
-            default:
-                view.mostrarErro("Opção inválida");
-                return;
-        }
-        view.mostrarCursos(cursos);
-    }
+    // Collection<CourseCatalogDTO> cursos;
+    // switch (opcao) {
+    // case 1:
+    // cursos = courseService.findByDifficultyLevel(DifficultyLevel.BEGINNER);
+    // break;
+    // case 2:
+    // cursos = courseService.findByDifficultyLevel(DifficultyLevel.INTERMEDIATE);
+    // break;
+    // case 3:
+    // cursos = courseService.findByDifficultyLevel(DifficultyLevel.ADVANCED);
+    // break;
+    // default:
+    // view.mostrarErro("Opção inválida");
+    // return;
+    // }
+    // view.mostrarCursos(cursos);
+    // }
 
     private void matricularEmCurso() {
         String title = view.lerTituloCurso();
@@ -266,7 +376,7 @@ public class MenuController {
             return;
         }
 
-        supportTicketService.addTicket(title, message, currentUser);
-        view.mostrarTicketAberto(title, currentUser.getName(), message);
+        supportTicketService.addTicket(currentUser, title, message);
+        view.mostrarTicket(currentUser.getName(), title, message);
     }
 }

@@ -3,6 +3,7 @@ package service;
 import dtos.UserSummaryDTO;
 import repository.UserRepository;
 import model.Admin;
+import model.BasicPlan;
 import model.Student;
 import model.SubscriptionPlan;
 import model.User;
@@ -18,9 +19,11 @@ import Exceptions.UserNotFoundException;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final EnrollmentService enrollmentService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, EnrollmentService enrollmentService) {
         this.userRepository = userRepository;
+        this.enrollmentService = enrollmentService;
     }
 
     public UserSummaryDTO register(User user) {
@@ -47,12 +50,18 @@ public class UserService {
         throw new AccessDeniedException("Apenas administradores podem alterar planos.");
         }
         User user = userRepository.findByEmail(studentEmail)
-        
-            .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado com o e-mail: " + studentEmail));
+         .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado com o e-mail: " + studentEmail));
         if (!(user instanceof Student)) {
             throw new IllegalArgumentException("O usuário encontrado não é um aluno e não pode ter um plano.");
         }
         Student student = (Student) user;
+        if (newPlan instanceof BasicPlan) {
+        int matriculas = enrollmentService.getEnrollmentsByStudent(student.getEmail()).size();
+        if (matriculas > 3) {
+            throw new IllegalArgumentException("Aluno tem mais de 3 matrículas. Não pode mudar para plano Basic.");
+        }
+}
+        
         student.setSubscriptionPlan(newPlan);
         userRepository.save(student);
     }

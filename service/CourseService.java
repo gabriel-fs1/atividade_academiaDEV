@@ -9,6 +9,8 @@ import repository.CourseRepository;
 import java.util.Collection;
 import java.util.Optional;
 
+import Exceptions.CourseAlreadyExistsException;
+
 public class CourseService {
 
     private final CourseRepository cr;
@@ -19,7 +21,9 @@ public class CourseService {
 
     public CourseCatalogDTO addCourse(String title, String description,
      String instructorName, int durationInHours, DifficultyLevel difficultyLevel) {
-
+        if (cr.findByTitle(title).isPresent()) {
+        throw new CourseAlreadyExistsException("Já existe um curso com o título: " + title);
+        }
         Course savedCourse = new Course(title, description,
          instructorName, durationInHours, difficultyLevel);
 
@@ -52,6 +56,8 @@ public class CourseService {
 
     return toDTO(course);
 }
+
+
 
     private CourseCatalogDTO toDTO(Course course) {
         CourseCatalogDTO ccDto = new CourseCatalogDTO();

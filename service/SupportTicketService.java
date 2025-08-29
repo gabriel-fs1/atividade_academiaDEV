@@ -19,34 +19,34 @@ public class SupportTicketService {
         this.str = str;
     }
 
-    public SupportTicketDTO addTicket(String title, String description, User author) {
-        SupportTicket newTicket = new SupportTicket(author, description, title);
+    public SupportTicketDTO addTicket(User author, String title, String description) {
+        SupportTicket newTicket = new SupportTicket(author, title, description);
         this.str.save(newTicket);
         return toDto(newTicket);
     }
 
     public Optional<SupportTicketDTO> attendNextTicket(User admin) {
-    if (!(admin instanceof Admin)) {
-        throw new AccessDeniedException("Apenas administradores podem atender tickets.");
-    }
+        if (!(admin instanceof Admin)) {
+            throw new AccessDeniedException("Apenas administradores podem atender tickets.");
+        }
         return str.processNext()
-                .map(this::toDto); 
+                .map(this::toDto);
     }
 
     public List<SupportTicketDTO> findAll() {
-    return str.findAll().stream()
-               .map(this::toDto)
-               .toList();
-}
+        return str.findAll().stream()
+                .map(this::toDto)
+                .toList();
+    }
 
     private SupportTicketDTO toDto(SupportTicket ticket) {
         SupportTicketDTO dto = new SupportTicketDTO();
 
         dto.setTitle(ticket.getTitle());
-        dto.setDescription(ticket.getMessage()); 
-        dto.setEmailAuthor(ticket.getUser().getEmail()); 
+        dto.setDescription(ticket.getDescription());
+        dto.setEmailAuthor(ticket.getUser().getEmail());
 
         return dto;
     }
-    
+
 }
