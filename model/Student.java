@@ -1,8 +1,6 @@
 package model;
 import java.util.List;
 
-import annotation.CsvColumn;
-
 import java.util.ArrayList;
 
 public class Student extends User{

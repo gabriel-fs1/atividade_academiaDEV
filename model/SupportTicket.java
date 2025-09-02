@@ -1,7 +1,5 @@
 package model;
 
-import annotation.CsvColumn;
-
 public class SupportTicket {
 
     private User user;

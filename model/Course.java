@@ -1,6 +1,5 @@
 package model;
 
-import annotation.CsvColumn;
 
 public class Course {
 
