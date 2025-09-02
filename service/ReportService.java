@@ -85,6 +85,7 @@ public class ReportService {
     private CourseCatalogDTO toCourseCatalogDTO(Course course) {
         CourseCatalogDTO dto = new CourseCatalogDTO();
         dto.setTitle(course.getTitle());
+        dto.setDescription(course.getDescription());
         dto.setInstructorName(course.getInstructorName());
         dto.setDifficultyLevel(course.getDifficultyLevel());
         dto.setDurationInHours(course.getDurationInHours());

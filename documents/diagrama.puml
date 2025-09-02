@@ -1,4 +1,4 @@
-@startuml diagrama
+@startuml diagramaAcademiaDEV
 ' Skinparam para melhorar a legibilidade
 skinparam classAttributeIconSize 0
 
@@ -71,7 +71,6 @@ class Course {
 class Enrollment {
   - student: Student
   - course: Course
-  - enrollmentDate: LocalDate
   - progress: int
   + getStudent(): Student
   + getCourse(): Course
@@ -83,21 +82,11 @@ class SupportTicket {
   - user: User
   - title: String
   - message: String
-  - submissionDate: LocalDateTime
   + getUser(): User
   + getTitle(): String
   + getMessage(): String
 }
 
-' --- Classes Utilitárias/Serviços (representação simplificada) ---
-class PlatformData {
-  - users: Map<String, User>
-  - courses: Map<String, Course>
-  - supportTickets: Queue<SupportTicket>
-  + addUser(user: User): void
-  + findUserByEmail(email: String): Optional<User>
-  + ...
-}
 
 class GenericCsvExporter {
   + {static} export(data: List<?>, columns: List<String>): String

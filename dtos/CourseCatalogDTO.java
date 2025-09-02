@@ -65,11 +65,11 @@ public class CourseCatalogDTO {
     @Override
 public String toString() {
     return "===============================================\n" +
-            "||Title:'" + title + '\'' +
-            "\n||Description:'" + description + '\'' +
-            "\n||Instructor:'" + instructorName + '\'' +
-            "\n||Duration:" + durationInHours + "h" +
-            "\n||Dificulty:" + difficultyLevel +
+            "||Titulo:'" + title + '\'' +
+            "\n||Descrição:'" + description + '\'' +
+            "\n||Instrutor:'" + instructorName + '\'' +
+            "\n||Duração:" + durationInHours + "h" +
+            "\n||Dificuldade:" + difficultyLevel +
             "\n||Status: " + status +
             "\n===============================================\n" +
             "\n";

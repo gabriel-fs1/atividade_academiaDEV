@@ -359,9 +359,6 @@ public class MenuController {
                 case 1:
                     view.mostrarCursos(courseService.findActiveCourses());
                     break;
-                // case 2:
-                // verCursosPorDificuldade();
-                // break;
                 case 2:
                     matricularEmCurso();
                     break;
@@ -387,31 +384,6 @@ public class MenuController {
         }
     }
 
-    // private void verCursosPorDificuldade() {
-    // System.out.println("\n--- Dificuldade ---");
-    // System.out.println("1. Iniciante");
-    // System.out.println("2. Intermediário");
-    // System.out.println("3. Avançado");
-    // System.out.print("Escolha: ");
-    // int opcao = scanner.nextInt();
-
-    // Collection<CourseCatalogDTO> cursos;
-    // switch (opcao) {
-    // case 1:
-    // cursos = courseService.findByDifficultyLevel(DifficultyLevel.BEGINNER);
-    // break;
-    // case 2:
-    // cursos = courseService.findByDifficultyLevel(DifficultyLevel.INTERMEDIATE);
-    // break;
-    // case 3:
-    // cursos = courseService.findByDifficultyLevel(DifficultyLevel.ADVANCED);
-    // break;
-    // default:
-    // view.mostrarErro("Opção inválida");
-    // return;
-    // }
-    // view.mostrarCursos(cursos);
-    // }
 
     private void matricularEmCurso() {
         String title = view.lerTituloCurso();

@@ -1,0 +1,21 @@
+O objetivo principal no desenvolvimento do sistema da "AcademiaDev" foi criar uma aplicação que não apenas cumprisse os requisitos funcionais, mas que também fosse estruturada sem acoplamentos. Para isso, adotamos uma arquitetura em camadas baseada nos princípios do padrão MVC (Model-View-Controller), priorizando sempre o baixo acoplamento e a alta coesão entre os componentes. As camadas apresentadas pelo professor, em um primeiro momento, causaram algumas dúvidas, evidenciando a necessidade de materiais de apoio durante o desenvolvimento do protótipo.
+
+## Sobre a aplicação
+
+O funcionamento do sistema é centrado no Controller, que orquestra a interação entre o usuário e a lógica de negócio, seguindo o padrão MVC.
+
+Ao iniciar, a aplicação primeiro usa a classe InitialData para carregar um conjunto de dados já definidos em memória, simulando um banco de dados já populado. (aqui a galera discordou também, uns fizeran a injeção de dependências no main e outros fizeram o appconfig)
+
+O Controller então assume o controle, pedindo o email do usuário com a View e validando a identidade através do UserService para iniciar uma sessão. Uma vez logado, o Controller exibe o menu apropriado (Admin ou Aluno) e aguarda a ação do usuário.
+
+Para qualquer funcionalidade, o fluxo se repete: o Controller recebe a solicitação, chama o Service correspondente para executar as regras de negócio, e o Service utiliza os Repositories para buscar e manipular as entidades de domínio (User, Course). Para consulta, o Service traduz essas entidades para DTOs antes de retorná-las. Assim então, o Controller entrega o resultado — seja um DTO com dados ou uma mensagem de sucesso/erro — para a View, que é a única camada responsável por exibi-lo ao usuário.
+
+Toda a lógica desenvolvida foi pensada para evitar acoplamentos e aumentar a coesão deixar o sistema o mais manutenível possível.
+
+## Sobre o desenvolvimento
+
+As camadas mais conhecidas (MVC) não apresentaram tanta dificuldade no momento de desenvolvimento, o que foi essencial para o estruturamento inicial do projeto. As partes de repository foram rapidamente compreendidas, possibilitando um adiantamento significativo do andamento da atividade, entretanto, foi complicado entender a diferença entre o controller e a service, apesar de agora acreditarmos que a compreensão foi atingida.A lógica de DTO's foi um pouco confusa no início, mas muitas dúvidas foram sanadas após o envio de um e-mail para o professor. Além disso, a implementação do CsvExporter foi difícil, fazendo com que precisássemos de auxílio de material externo, como vídeos e pdf's sobre o assunto. Houve discordância em alguns momentos de implementação, como na existência de um DataStore, mas a estrutura desenvolvida por ambos, no geral, segue a mesma lógica e foi feita em conjunto.
+
+Sendo assim, a atividade possui o padrão MVC, com as subdivisões de repository, service e DTO's, além da implementação de exceptions personalizadas e annotation de exportar CSV's.
+
+Para a interface de linha de comando, que compõe a camada View, optamos por uma abordagem de interação com o console em uma única classe MenuView. Essa escolha visou simplificar o escopo do projeto, centralizando todos os métodos de entrada.

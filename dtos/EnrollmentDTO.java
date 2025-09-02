@@ -108,15 +108,15 @@ public class EnrollmentDTO {
 
     @Override
     public String toString(){
-        return "Enrollments{" +
-                "\nStudent Name:'" + studentName + '\'' +
-                "\nCourse Title:'" + courseTitle + '\'' +
-                "\nCourse Description:'" + courseDescription + '\'' +
-                "\nInstructor Name:'" + instructorName + '\'' +
-                "\nDuration In Hours:" + durationInHours + "h" +
-                "\nDifficulty Level:" + difficultyLevel +
-                "\nProgress:" + progress + "%" +
-                '}' +
+        return "===============================================" +
+                "\n||Nome do Estudante:'" + studentName + '\'' +
+                "\n||Titulo:'" + courseTitle + '\'' +
+                "\n||Descriçao:'" + courseDescription + '\'' +
+                "\n||Instrutor:'" + instructorName + '\'' +
+                "\n||Duração:" + durationInHours + "h" +
+                "\n||Dificuldade:" + difficultyLevel +
+                "\n||Progresso:" + progress + "%" +
+                "\n===============================================\n" +
                 "\n";
     }
 }

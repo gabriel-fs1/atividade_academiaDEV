@@ -4,17 +4,11 @@ import annotation.CsvColumn;
 
 public class Course {
 
-    @CsvColumn(header = "Titulo")
     private String title;
-    @CsvColumn(header = "Descrição")
     private String description;
-    @CsvColumn(header = "Instrutor")
     private String instructorName;
-    @CsvColumn(header = "Duracao")
     private int durationInHours;
-    @CsvColumn(header = "Dificuldade")
     private DifficultyLevel difficultyLevel;
-    @CsvColumn(header = "Status")
     private CourseStatus status;
 
     public Course(String title, String description, String instructorName, int durationInHours, DifficultyLevel difficultyLevel) {
