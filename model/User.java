@@ -1,12 +1,9 @@
 package model;
 
-import annotation.CsvColumn;
 
 public class User {
 
-    @CsvColumn(header = "Nome")
     protected String name;
-    @CsvColumn(header = "Email")
     protected String email;
 
     public User(String name, String email) {
@@ -22,6 +19,6 @@ public class User {
         return email;
     }
 
-
+   
     
 }

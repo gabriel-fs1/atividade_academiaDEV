@@ -1,11 +1,13 @@
 package service;
 
 import dtos.EnrollmentDTO;
+import dtos.EnrollmentExportDTO;
 import model.*;
 import repository.EnrollmentRepository;
 import repository.CourseRepository;
 import repository.UserRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,6 +105,12 @@ public class EnrollmentService {
                 .collect(Collectors.toList());
     }
 
+    public Collection<EnrollmentExportDTO> getAllEnrollmentsForExport() {
+        return enrollmentRepository.findAll().stream()
+                .map(this::toExportDTO)
+                .collect(Collectors.toList());
+    }
+
     
     private EnrollmentDTO toDTO(Enrollment enrollment) {
         EnrollmentDTO dto = new EnrollmentDTO();
@@ -116,5 +124,15 @@ public class EnrollmentService {
         dto.setCourseStatus(enrollment.getCourse().getStatus());
         dto.setProgress(enrollment.getProgress());
         return dto;
+    }
+
+    private EnrollmentExportDTO toExportDTO(Enrollment e) {
+        EnrollmentExportDTO dto = new EnrollmentExportDTO();
+        dto.setStudent(e.getStudent().getName());
+        dto.setEmail(e.getStudent().getEmail());
+        dto.setCourse(e.getCourse().getTitle());
+        dto.setProgress(e.getProgress());
+        return dto;
+    
     }
 }

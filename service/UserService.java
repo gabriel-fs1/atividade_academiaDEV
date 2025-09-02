@@ -1,5 +1,6 @@
 package service;
 
+import dtos.UserExportDTO;
 import dtos.UserSummaryDTO;
 import repository.UserRepository;
 import model.Admin;
@@ -35,7 +36,7 @@ public class UserService {
         return toDTO(user);
     }
 
-    public UserSummaryDTO login(String email){
+    public UserSummaryDTO login(String email) {
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
             throw new UserNotFoundException("Usuário não encontrado para o email: " + email);
@@ -45,23 +46,23 @@ public class UserService {
         return toDTO(user);
     }
 
-     public void changeSubscriptionPlan(String studentEmail, SubscriptionPlan newPlan, User admin) {
+    public void changeSubscriptionPlan(String studentEmail, SubscriptionPlan newPlan, User admin) {
         if (!(admin instanceof Admin)) {
-        throw new AccessDeniedException("Apenas administradores podem alterar planos.");
+            throw new AccessDeniedException("Apenas administradores podem alterar planos.");
         }
         User user = userRepository.findByEmail(studentEmail)
-         .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado com o e-mail: " + studentEmail));
+                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado com o e-mail: " + studentEmail));
         if (!(user instanceof Student)) {
             throw new IllegalArgumentException("O usuário encontrado não é um aluno e não pode ter um plano.");
         }
         Student student = (Student) user;
         if (newPlan instanceof BasicPlan) {
-        int matriculas = enrollmentService.getEnrollmentsByStudent(student.getEmail()).size();
-        if (matriculas > 3) {
-            throw new IllegalArgumentException("Aluno tem mais de 3 matrículas. Não pode mudar para plano Basic.");
+            int matriculas = enrollmentService.getEnrollmentsByStudent(student.getEmail()).size();
+            if (matriculas > 3) {
+                throw new IllegalArgumentException("Aluno tem mais de 3 matrículas. Não pode mudar para plano Basic.");
+            }
         }
-}
-        
+
         student.setSubscriptionPlan(newPlan);
         userRepository.save(student);
     }
@@ -70,7 +71,6 @@ public class UserService {
         return userRepository.findByEmail(email).map(this::toDTO);
     }
 
-    
     public Collection<UserSummaryDTO> findAllUsers() {
         return userRepository.findAll().stream()
                 .map(this::toDTO)
@@ -78,13 +78,27 @@ public class UserService {
     }
 
     public Optional<User> findFullUserByEmail(String email) {
-    return userRepository.findByEmail(email);
-}
+        return userRepository.findByEmail(email);
+    }
+
+    public Collection<UserExportDTO> getAllUsersForExport() {
+        return userRepository.findAll().stream()
+                .map(this::toExportDTO)
+                .collect(Collectors.toList());
+    }
 
     private UserSummaryDTO toDTO(User user) {
-    String role = user instanceof Student ? "STUDENT" : "ADMIN";
+        String role = user instanceof Student ? "STUDENT" : "ADMIN";
 
-    return new UserSummaryDTO(user.getName(), user.getEmail(), role);
-}
+        return new UserSummaryDTO(user.getName(), user.getEmail(), role);
+
+    }
+
+    private UserExportDTO toExportDTO(User user) {
+        UserExportDTO dto = new UserExportDTO();
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        return dto;
+    }
 
 }

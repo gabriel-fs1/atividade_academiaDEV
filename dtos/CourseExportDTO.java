@@ -1,15 +1,22 @@
 package dtos;
 
+import annotation.CsvColumn;
 import model.CourseStatus;
 import model.DifficultyLevel;
 
-public class CourseCatalogDTO {
+public class CourseExportDTO {
 
+    @CsvColumn(header = "Titulo")
     private String title;
+    @CsvColumn(header = "Descrição")
     private String description;
+    @CsvColumn(header = "Instrutor")
     private String instructorName;
-    private DifficultyLevel difficultyLevel;
+    @CsvColumn(header = "Duracao")
     private int durationInHours;
+    @CsvColumn(header = "Dificuldade")
+    private DifficultyLevel difficultyLevel;
+    @CsvColumn(header = "Status")
     private CourseStatus status;
 
     
@@ -61,18 +68,5 @@ public class CourseCatalogDTO {
     public void setStatus(CourseStatus status) {
         this.status = status;
     }
-
-    @Override
-public String toString() {
-    return "===============================================\n" +
-            "||Title:'" + title + '\'' +
-            "\n||Description:'" + description + '\'' +
-            "\n||Instructor:'" + instructorName + '\'' +
-            "\n||Duration:" + durationInHours + "h" +
-            "\n||Dificulty:" + difficultyLevel +
-            "\n||Status: " + status +
-            "\n===============================================\n" +
-            "\n";
-}
     
 }

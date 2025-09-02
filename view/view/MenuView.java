@@ -9,12 +9,15 @@ import dtos.UserSummaryDTO;
 import model.CourseStatus;
 import model.DifficultyLevel;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MenuView {
 
@@ -75,6 +78,128 @@ public class MenuView {
         System.out.print("Escolha: ");
         return lerOpcao();
     }
+
+    public List<String> selecionarCamposParaCurso() {
+    System.out.println("\n--- Selecione os campos para exportar (Curso) ---");
+    System.out.println("1. Título");
+    System.out.println("2. Descrição");
+    System.out.println("3. Instrutor");
+    System.out.println("4. Duracao");
+    System.out.println("5. Dificuldade");
+    System.out.println("6. Status");
+    System.out.print("Digite os números separados por vírgula (ex: 1,3,4): ");
+    
+    String input = scanner.nextLine().trim();
+    if (input.isEmpty()) {
+        return List.of(); // retorna vazio
+    }
+    
+
+    Map<String, String> opcoes = Map.of(
+    "1", "title",
+    "2", "description",
+    "3", "instructorName",
+    "4", "durationInHours",
+    "5", "difficultyLevel",
+    "6", "status"
+);
+
+    List<String> campos = Arrays.stream(input.split(","))
+            .map(String::trim)
+            .map(opcoes::get)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+
+    return campos;
+}
+
+    public List<String> selecionarCamposParaMatricula() {
+    System.out.println("\n--- Selecione os campos para exportar (Matriculas) ---");
+    System.out.println("1. Aluno");
+    System.out.println("2. Email");
+    System.out.println("3. Curso");
+    System.out.println("4. Progresso");
+    System.out.print("Digite os números separados por vírgula (ex: 1,3,4): ");
+    
+    String input = scanner.nextLine().trim();
+    if (input.isEmpty()) {
+        return List.of(); // retorna vazio
+    }
+    
+
+    Map<String, String> opcoes = Map.of(
+    "1", "student",
+    "2", "email",
+    "3", "course",
+    "4", "progress"
+);
+
+    List<String> campos = Arrays.stream(input.split(","))
+            .map(String::trim)
+            .map(opcoes::get)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+
+    return campos;
+}
+
+public List<String> selecionarCamposParaUsuarios() {
+    System.out.println("\n--- Selecione os campos para exportar (User) ---");
+    System.out.println("1. Nomes");
+    System.out.println("2. Email");
+
+    System.out.print("Digite os números separados por vírgula (ex: 1,3,4): ");
+    
+    String input = scanner.nextLine().trim();
+    if (input.isEmpty()) {
+        return List.of(); // retorna vazio
+    }
+    
+
+    Map<String, String> opcoes = Map.of(
+    "1", "name",
+    "2", "email"
+
+);
+
+    List<String> campos = Arrays.stream(input.split(","))
+            .map(String::trim)
+            .map(opcoes::get)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+
+    return campos;
+}
+
+public List<String> selecionarCamposParaTickets() {
+    System.out.println("\n--- Selecione os campos para exportar (Tickets) ---");
+    System.out.println("1. Autor");
+    System.out.println("2. Titulo");
+    System.out.println("3. Conteudo");
+
+    System.out.print("Digite os números separados por vírgula (ex: 1,3,4): ");
+    
+    String input = scanner.nextLine().trim();
+    if (input.isEmpty()) {
+        return List.of(); // retorna vazio
+    }
+    
+
+    Map<String, String> opcoes = Map.of(
+    "1", "user",
+    "2", "title",
+    "3", "description"
+
+);
+
+    List<String> campos = Arrays.stream(input.split(","))
+            .map(String::trim)
+            .map(opcoes::get)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+
+    return campos;
+}
 
     public boolean confirmarAlteracaoPlano(String email, String atual, String novo) {
         System.out.println("email: " + email);

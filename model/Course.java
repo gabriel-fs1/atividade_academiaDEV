@@ -8,7 +8,7 @@ public class Course {
     private String title;
     @CsvColumn(header = "Descrição")
     private String description;
-    @CsvColumn(header = "Instructor")
+    @CsvColumn(header = "Instrutor")
     private String instructorName;
     @CsvColumn(header = "Duracao")
     private int durationInHours;

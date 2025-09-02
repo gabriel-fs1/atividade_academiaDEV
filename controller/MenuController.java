@@ -3,10 +3,13 @@
 package controller;
 
 import dtos.CourseCatalogDTO;
+import dtos.CourseExportDTO;
 import dtos.EnrollmentDTO;
+import dtos.EnrollmentExportDTO;
+import dtos.TicketExportDTO;
+import dtos.UserExportDTO;
 import dtos.UserSummaryDTO;
 import model.BasicPlan;
-
 import model.CourseStatus;
 import model.DifficultyLevel;
 
@@ -22,13 +25,12 @@ import util.GenericCsvExporter;
 import service.ReportService;
 import view.MenuView;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
-
-
 
 public class MenuController {
 
@@ -42,7 +44,6 @@ public class MenuController {
 
     private User currentUser;
     private Scanner scanner = new Scanner(System.in);
-    
 
     public MenuController(UserService userService,
             CourseService courseService,
@@ -138,36 +139,98 @@ public class MenuController {
     }
 
     private void exportarDados() {
-    System.out.println("Escolha o tipo de dado para exportar:");
-    System.out.println("1. Cursos");
-    System.out.println("2. Alunos");
-    System.out.println("3. Matrículas");
-    System.out.println("4. Tickets");
-    System.out.println("5. Sair");
-    System.out.print("Escolha: ");
-    String opcao = scanner.nextLine().trim();
+        System.out.println("Escolha o tipo de dado para exportar:");
+        System.out.println("1. Cursos");
+        System.out.println("2. Usuarios");
+        System.out.println("3. Matrículas");
+        System.out.println("4. Tickets");
+        System.out.println("5. Sair");
+        System.out.print("Escolha: ");
+        String opcao = scanner.nextLine().trim();
 
-    switch (opcao) {
-        case "1":
-            //exportarCursos();
-            break;
-        case "2":
-            //exportarAlunos();
-            break;
-        case "3":
-            //exportarMatriculas();
-            break;
-        case "4":
-            //exportarTickets();
-            break;
-        case "5":
-            return;
-        default:
-            System.out.println("Opção inválida.");
+        switch (opcao) {
+            case "1":
+                exportarCursos();
+                break;
+            case "2":
+                exportarUsuarios();
+                break;
+            case "3":
+                exportarMatriculas();
+                break;
+            case "4":
+                exportarTickets();
+                break;
+            case "5":
+                return;
+            default:
+                System.out.println("Opção inválida.");
+        }
     }
-}
 
-    
+    private void exportarCursos() {
+
+        Collection<CourseExportDTO> cursos = courseService.getAllCoursesForExport();
+
+        List<String> campos = view.selecionarCamposParaCurso();
+        if (campos.isEmpty()) {
+            view.mostrarErro("Nenhum campo selecionado.");
+            return;
+        }
+
+        String csv = csvExporter.exportToCsv(cursos, campos.toArray(new String[0]));
+
+        System.out.println("\n=== DADOS EXPORTADOS ===\n");
+        System.out.println(csv);
+    }
+
+    private void exportarMatriculas() {
+
+        Collection<EnrollmentExportDTO> mat = enrollmentService.getAllEnrollmentsForExport();
+
+        List<String> campos = view.selecionarCamposParaMatricula();
+        if (campos.isEmpty()) {
+            view.mostrarErro("Nenhum campo selecionado.");
+            return;
+        }
+
+        String csv = csvExporter.exportToCsv(mat, campos.toArray(new String[0]));
+
+        System.out.println("\n=== DADOS EXPORTADOS ===\n");
+        System.out.println(csv);
+    }
+
+    private void exportarUsuarios() {
+
+        Collection<UserExportDTO> u = userService.getAllUsersForExport();
+
+        List<String> campos = view.selecionarCamposParaUsuarios();
+        if (campos.isEmpty()) {
+            view.mostrarErro("Nenhum campo selecionado.");
+            return;
+        }
+
+        String csv = csvExporter.exportToCsv(u, campos.toArray(new String[0]));
+
+        System.out.println("\n=== DADOS EXPORTADOS ===\n");
+        System.out.println(csv);
+    }
+
+    private void exportarTickets() {
+
+        Collection<TicketExportDTO> t = supportTicketService.getAllTicketsForExport();
+
+        List<String> campos = view.selecionarCamposParaTickets();
+        if (campos.isEmpty()) {
+            view.mostrarErro("Nenhum campo selecionado.");
+            return;
+        }
+
+        String csv = csvExporter.exportToCsv(t, campos.toArray(new String[0]));
+
+        System.out.println("\n=== DADOS EXPORTADOS ===\n");
+        System.out.println(csv);
+    }
 
     private void alterarPlano() {
         String email = view.lerEmailAluno();
@@ -213,56 +276,52 @@ public class MenuController {
         }
     }
 
-    
-
     private void atenderTicket() {
         view.mostrarTicketAtendido(supportTicketService.attendNextTicket(currentUser));
     }
 
     private void showReportsMenu() {
-    while (true) {
-        System.out.println("\n--- Relatórios ---");
-        System.out.println("1. Cursos por dificuldade");
-        System.out.println("2. Instrutores ativos");
-        System.out.println("3. Alunos por plano");
-        System.out.println("4. Média de progresso");
-        System.out.println("5. Aluno com mais matrículas");
-        System.out.println("6. Voltar");
-        System.out.print("Escolha: ");
+        while (true) {
+            System.out.println("\n--- Relatórios ---");
+            System.out.println("1. Cursos por dificuldade");
+            System.out.println("2. Instrutores ativos");
+            System.out.println("3. Alunos por plano");
+            System.out.println("4. Média de progresso");
+            System.out.println("5. Aluno com mais matrículas");
+            System.out.println("6. Voltar");
+            System.out.print("Escolha: ");
 
-        String opcao = scanner.nextLine().trim();
+            String opcao = scanner.nextLine().trim();
 
-        switch (opcao) {
-            case "1":
-                DifficultyLevel level = view.selecionarDificuldade();
-                List<CourseCatalogDTO> cursos = reportService.getCoursesByDifficulty(level);
-                view.mostrarCursos(cursos);
-                break;
-            case "2":
-                Set<String> instrutores = reportService.getActiveInstructors();
-                view.mostrarInstrutores(instrutores);
-                break;
-            case "3":
-                Map<String, List<UserSummaryDTO>> alunosPorPlano = reportService.getStudentsByPlan();
-                view.mostrarAlunoAgrupado(alunosPorPlano);
-                break;
-            case "4":
-                double media = reportService.getAverageProgress();
-                view.mostrarMediaProgresso(media);
-                break;
-            case "5":
-                Optional<UserSummaryDTO> alunoMaisMatriculas = reportService.getStudentWithMostEnrollments();
-                view.mostrarAlunoComMaiorMatricula(alunoMaisMatriculas);
-                break;
-            case "6":
-                return;
-            default:
-                System.out.println("Opção inválida.");
+            switch (opcao) {
+                case "1":
+                    DifficultyLevel level = view.selecionarDificuldade();
+                    List<CourseCatalogDTO> cursos = reportService.getCoursesByDifficulty(level);
+                    view.mostrarCursos(cursos);
+                    break;
+                case "2":
+                    Set<String> instrutores = reportService.getActiveInstructors();
+                    view.mostrarInstrutores(instrutores);
+                    break;
+                case "3":
+                    Map<String, List<UserSummaryDTO>> alunosPorPlano = reportService.getStudentsByPlan();
+                    view.mostrarAlunoAgrupado(alunosPorPlano);
+                    break;
+                case "4":
+                    double media = reportService.getAverageProgress();
+                    view.mostrarMediaProgresso(media);
+                    break;
+                case "5":
+                    Optional<UserSummaryDTO> alunoMaisMatriculas = reportService.getStudentWithMostEnrollments();
+                    view.mostrarAlunoComMaiorMatricula(alunoMaisMatriculas);
+                    break;
+                case "6":
+                    return;
+                default:
+                    System.out.println("Opção inválida.");
+            }
         }
     }
-}
-
-    
 
     private void ativarOuInativarCurso() {
         String title = view.lerTituloCurso();

@@ -1,6 +1,7 @@
 package service;
 
 import dtos.CourseCatalogDTO;
+import dtos.CourseExportDTO;
 import model.Course;
 import model.CourseStatus;
 import model.DifficultyLevel;
@@ -8,6 +9,7 @@ import repository.CourseRepository;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import Exceptions.CourseAlreadyExistsException;
 
@@ -33,6 +35,12 @@ public class CourseService {
 
     public Collection<CourseCatalogDTO> findAll() {
         return this.cr.findAll().stream().map(this::toDTO).toList();
+    }
+
+    public Collection<CourseExportDTO> getAllCoursesForExport() {
+        return cr.findAll().stream()
+                .map(this::toExportDTO)
+                .collect(Collectors.toList());
     }
 
     public Optional<CourseCatalogDTO> findByTitle(String title) {
@@ -68,6 +76,17 @@ public class CourseService {
         ccDto.setDurationInHours(course.getDurationInHours());
         ccDto.setStatus(course.getStatus());
         return ccDto;
+    }
+
+    private CourseExportDTO toExportDTO(Course course) {
+        CourseExportDTO dto = new CourseExportDTO();
+        dto.setTitle(course.getTitle());
+        dto.setDescription(course.getDescription());
+        dto.setInstructorName(course.getInstructorName());
+        dto.setDurationInHours(course.getDurationInHours());
+        dto.setDifficultyLevel(course.getDifficultyLevel());
+        dto.setStatus(course.getStatus());
+        return dto;
     }
     
 }
