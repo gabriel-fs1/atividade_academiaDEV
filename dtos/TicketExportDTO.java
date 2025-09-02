@@ -7,6 +7,8 @@ public class TicketExportDTO {
 
     @CsvColumn(header = "Usuário")
     private String user;
+    @CsvColumn(header = "Email")
+    private String email;
     @CsvColumn(header = "Titulo")
     private String title;
     @CsvColumn(header = "Descrição")
@@ -17,6 +19,12 @@ public class TicketExportDTO {
     }
     public void setUser(String user) {
         this.user = user;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
     public String getTitle() {
         return title;

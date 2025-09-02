@@ -174,6 +174,7 @@ public List<String> selecionarCamposParaUsuarios() {
 public List<String> selecionarCamposParaTickets() {
     System.out.println("\n--- Selecione os campos para exportar (Tickets) ---");
     System.out.println("1. Autor");
+    System.out.println("1. Email do Autor");
     System.out.println("2. Titulo");
     System.out.println("3. Conteudo");
 
@@ -187,8 +188,9 @@ public List<String> selecionarCamposParaTickets() {
 
     Map<String, String> opcoes = Map.of(
     "1", "user",
-    "2", "title",
-    "3", "description"
+    "2", "email",
+    "3", "title",
+    "4", "description"
 
 );
 

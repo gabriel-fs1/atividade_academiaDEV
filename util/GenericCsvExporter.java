@@ -54,9 +54,6 @@ public class GenericCsvExporter {
             .peek(field -> field.setAccessible(true))
             .collect(Collectors.toList());
 
-    System.out.println("[DEBUG] Campos com @CsvColumn encontrados: " +
-        fields.stream().map(Field::getName).toList());
-
     return fields;
 }
 
